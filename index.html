@@ -40,8 +40,6 @@ h2 { font-size:22px; margin-bottom:20px; }
 </div>
 
 <script>
-// ===== Replace this with your 40 questions =====
-
 const quiz = [
   {
     question: "1. Kenen vastuulla on pyörätuolin huolellinen kiinnittäminen taksiin, kun asiakkaalla on mukana henkilökohtainen avustaja?",
@@ -224,7 +222,6 @@ const quiz = [
     correct: "b"
   }
 ];
-  
 
 let current = 0;
 let userAnswers = Array(quiz.length).fill(null);
@@ -248,11 +245,11 @@ function loadQuestion() {
     optionsDiv.appendChild(btn);
   });
 
-  // Show feedback if answered
   const feedback = document.getElementById("feedback");
   if(userAnswers[current]){
-    feedback.innerText = userAnswers[current] === q.answer ? "✅ Correct!" : "❌ Wrong! Correct: " + q.answer;
-    feedback.style.color = userAnswers[current] === q.answer ? "green" : "red";
+    const correctOption = q.options.find(opt => opt[0] === q.correct);
+    feedback.innerText = userAnswers[current][0] === q.correct ? "✅ Correct!" : "❌ Wrong! Correct: " + correctOption.slice(3);
+    feedback.style.color = userAnswers[current][0] === q.correct ? "green" : "red";
   } else {
     feedback.innerText = "";
   }
@@ -263,13 +260,15 @@ function loadQuestion() {
 function selectAnswer(option){
   userAnswers[current] = option;
 
-  // Update feedback
   const feedback = document.getElementById("feedback");
-  if(option === quiz[current].answer){
+  const q = quiz[current];
+  const correctOption = q.options.find(opt => opt[0] === q.correct);
+
+  if(option[0] === q.correct){
     feedback.innerText = "✅ Correct!";
     feedback.style.color = "green";
   } else {
-    feedback.innerText = "❌ Wrong! Correct: " + quiz[current].answer;
+    feedback.innerText = "❌ Wrong! Correct: " + correctOption.slice(3);
     feedback.style.color = "red";
   }
 
@@ -296,7 +295,7 @@ function prevQuestion(){
 }
 
 function showResult(){
-  const totalCorrect = userAnswers.filter((ans, i) => ans === quiz[i].answer).length;
+  const totalCorrect = userAnswers.filter((ans, i) => ans[0] === quiz[i].correct).length;
   document.getElementById("question").innerText = `🎉 Quiz Completed! Your score: ${totalCorrect} / ${quiz.length}`;
   document.getElementById("options").innerHTML = "";
   document.getElementById("feedback").innerText = "";
@@ -304,7 +303,6 @@ function showResult(){
   document.getElementById("progress").innerText = "";
 }
 
-// Load first question
 loadQuestion();
 </script>
 
