@@ -1,0 +1,167 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taxi Exam Quiz</title>
+<style>
+body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin:0; padding:20px; }
+.quiz-container { max-width:700px; margin:auto; background:#fff; padding:30px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+h2 { font-size:22px; margin-bottom:20px; }
+.options { display:flex; flex-direction:column; gap:15px; }
+.option-btn { padding:15px; font-size:16px; border-radius:8px; border:2px solid #4CAF50; background-color:#fff; cursor:pointer; transition:0.3s; text-align:left; width:100%; }
+.option-btn:hover { background-color:#4CAF50; color:#fff; }
+.option-btn.selected { background-color:#4CAF50; color:#fff; }
+.feedback { margin-top:20px; font-weight:bold; font-size:18px; }
+.nav-buttons { margin-top:20px; display:flex; gap:10px; }
+.next-btn, .back-btn { padding:12px 25px; font-size:16px; border:none; border-radius:8px; cursor:pointer; color:#fff; }
+.next-btn { background-color:#2196F3; }
+.next-btn:hover { background-color:#0b7dda; }
+.back-btn { background-color:#9E9E9E; }
+.back-btn:hover { background-color:#707070; }
+.progress { margin-top:10px; font-size:14px; color:#333; }
+@media (max-width:500px) {
+  .option-btn { font-size:14px; padding:12px; }
+  .next-btn, .back-btn { font-size:14px; padding:10px 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="quiz-container">
+  <h2 id="question"></h2>
+  <div class="options" id="options"></div>
+  <div class="feedback" id="feedback"></div>
+  <div class="nav-buttons">
+    <button class="back-btn" onclick="prevQuestion()">Back</button>
+    <button class="next-btn" onclick="nextQuestion()">Next</button>
+  </div>
+  <div class="progress" id="progress"></div>
+</div>
+
+<script>
+// ===== Replace this with your 40 questions =====
+const quiz = [
+  { question:"1) Kenen vastuulla on pyörätuolin huolellinen kiinnittäminen taksiin, kun asiakkaan mukana on henkilökohtainen avustaja?", options:["a. Asiakkaan","b. Taksinkuljettaja","c. Henkilökohtaisen avustaja"], answer:"b. Taksinkuljettaja" },
+  { question:"2) Miten toimit, kun asiakas pyytää ajamaan ylinopeutta?", options:["a. Voit ajaa ylinopeutta, jos asiakas maksaa sakot","b. Kerrot asiakkaalle, ettet voi ajaa ylinopeutta, mutta teet parhaasi turvallisesti","c. Voit ajaa ylinopeutta, jos asiakkaalla on perusteltu syy"], answer:"b. Kerrot asiakkaalle, ettet voi ajaa ylinopeutta, mutta teet parhaasi turvallisesti" },
+  { question:"3) Olet ottanut asiakkaan kyytiin paikkakuntasi taksiasemalta. Huomaat, että handsfree-laite on jäänyt kotiin. Mitä teet?", options:["a. Vastaan puhelimeen normaalisti pahoittelen asiakasta","b. Pysähdyt tienvarteen, jotta voit kirjoittaa tiedot","c. Pahoittelen asiakasta puhelin aiheuttamaa häiriötä enkä vastaa puheluun"], answer:"c. Pahoittelen asiakasta puhelin aiheuttamaa häiriötä enkä vastaa puheluun" },
+  { question:"4) Mikä seuraavista hyvää viestimien käyttöön liittyvää asiakaspalvelua?", options:["a. Kuljettaja voi lähettää viestejä, jos puhelin on äänettömällä","b. Puhelun soittaminen, jos se kuljetuksen suorittamiseksi on välttämätön","c. Kuljettaja voi puhua henkilökohtaisia puheluita, jos asiakas"], answer:"b. Puhelun soittaminen, jos se kuljetuksen suorittamiseksi on välttämätön" },
+  { question:"5) Mikä seuraavista väittämistä pitää paikkaansa?", options:["a. Jos kuljettaja joutuu auton liikkuessa soittamaan puhelun, hänen ei tarvitse käyttää handsfree-laitetta","b. Mikäli taksissa ei ole asiakkaita, saa kuljettaja ajoneuvon liikkuessa katsella televisiokuvaa","c. Kuljettaja saa soittaa puhelun ajon aikana handsfree-laitetta käyttäen, jos se on kuljetuksen suorittamiseksi välttämätön"], answer:"c. Kuljettaja saa soittaa puhelun ajon aikana handsfree-laitetta käyttäen, jos se on kuljetuksen suorittamiseksi välttämätön" },
+  { question:"6) Miten toimit, kun asiakas saa epileptisen kohtauksen kuljetuksen aikana?", options:["a. Pysäytät ajoneuvon, pidät tiukasti kiinni asiakkaasta, jotta hän ei satuttaisi itseään","b. Pysäytät ajoneuvon ja huolehdit, että asiakas ei kolhi päätään, mutta et pyri estämään kouristusliikkeitä","c. Jatkat ajamista pitäen toisella kädellä asiakasta paikallaan"], answer:"b. Pysäytät ajoneuvon ja huolehdit, että asiakas ei kolhi päätään, mutta et pyri estämään kouristusliikkeitä" },
+  { question:"7) Miksi alkolukko vaaditaan pakollisena varusteena kunnan tilaamissa koulu- ja päivähoitokuljetuksissa?", options:["a. Sillä estetään ajoneuvon liikkuminen, jos kuljettaja on nauttinut alkoholia","b. Se on tarkoitettu ainoastaan työnantajan seurantavälineeksi","c. Sillä poliisi tarkistaa liikenteen valvonnassa kuljettajan ajokunnon"], answer:"a. Sillä estetään ajoneuvon liikkuminen, jos kuljettaja on nauttinut alkoholia" },
+  { question:"8) Liikenteessä on poikkeusjärjestelyjä liikenneonnettomuuden vuoksi. Saat ristiriitaisia toimintaohjeita kolmelta taholta. Kenellä on määräysvalta?", options:["a. Liikennevirasto","b. Poliisi","c. Työnantajasi"], answer:"b. Poliisi" },
+  { question:"9) Miten tulee toimia, kun otat kyytiin hyvin hitaasti liikkuvan asiakkaan?", options:["a. Avustan häntä kysymättä asiakasta","b. Nousen autosta ja kysyn tarvitseeko hän apua","c. Käsken asiakasta kiirehtimään autoon"], answer:"b. Nousen autosta ja kysyn tarvitseeko hän apua" },
+  {
+  question: "10) Miten kuljettajan tulee huomioida näkövammaista asiakasta?",
+  options: [
+    "a. Kuljettajan on hyvä näkövammaista palvellessa puhua hiukan kovemmalla äänellä.",
+    "b. Taksinkuljettaja tulee aina ohjata asiakasta olkapäästä ja auttaa hänet autoon kevyesti työntäen.",
+    "c. Taksinkuljettajan on hyvä kysyä asiakkaalta, miten häntä voi auttaa ennen kuin ryhtyy auttamaan asiakasta."
+  ],
+  answer: "c. Taksinkuljettajan on hyvä kysyä asiakkaalta, miten häntä voi auttaa ennen kuin ryhtyy auttamaan asiakasta."
+},
+  { question:"11) Kenen vastuulla on hankkia koulu- ja päivähoitokuljetuksen kuljettajan rikostaustaote?", options:["a. Kuljettajan","b. Työnantajan","c. Koulu- tai päiväkodin"], answer:"a. Kuljettajan" },
+  { question:"12) Voitko toimia vakiotaksinkuljettajana säännöllisissä kuntoutusmatkoissa, kun matkustajana on pyörätuolia käyttävä 15-vuotias lapsi?", options:["a. En voi, lapsella ei ole oikeutta taksia","b. Selvitän työnantajalta","c. Voin huoltajan valtuutuksella"], answer:"c. Voin huoltajan valtuutuksella" },
+  { question:"13) Miten toimia, kun näkövammaisella asiakkaalla on opaskoira?", options:["a. Nouset autosta ja kerrot opaskoiran paikan asiakkaan jalkatilassa","b. Nouset autosta ja rapsutat opaskoiraa","c. Odotat ajoneuvossa asiakkaan saapumista ja avaat oven"], answer:"c. Odotat ajoneuvossa asiakkaan saapumista ja avaat oven" },
+  { question:"14) Mikä osuus asiakas maksaa KELA-kyydistä kuljettajalle?", options:["a. Koko matkan hinnan","b. Enintään omavastuu","c. Omavastuun ylittävä osuus"], answer:"b. Enintään omavastuu" },
+  { question:"15) Mitä turvavyön käytöstä on määrätty koskien koulukuljetuksia?", options:["a. Takapenkillä oppilaan ei tarvitse käyttää turvavyötä","b. Kuljettajan ei tarvitse käyttää turvavyötä","c. Kuljettajan tulee käyttää turvavyötä"], answer:"c. Kuljettajan tulee käyttää turvavyötä" },
+  { question:"16) Kenellä on vastuu työvuorossa taksin liikennekelpoisuudesta?", options:["a. Kuljettajalla","b. Taksintarkastajalla","c. Katsastajalla"], answer:"a. Kuljettajalla" },
+  { question:"17) Miksi avun hälyttämiseen onnettomuuspaikalle kannattaa käyttää 112 Suomi -mobiilisovellusta?", options:["a. Hätäpuhelu menee nopeammin","b. Hätäkeskus saa automaattisesti sijainnin","c. Soittaminen on halvempi"], answer:"b. Hätäkeskus saa automaattisesti sijainnin" },
+  { question:"18) Miksi pimeässä moottoritien pysähtyessä on laitettava ajovalot päälle?", options:["a. Jotta muut tienkäyttäjät näkevät pysähtyneen ajoneuvosi","b. Havaitset paremmin villieläimet","c. Pysäköinti- tai lähivalot kuluttavat vähemmän virtaa"], answer:"a. Jotta muut tienkäyttäjät näkevät pysähtyneen ajoneuvosi" },
+  { question:"19) Mitä kuljettajalta edellytetään, jos asiakas ei kykene puhumaan kieltä?", options:["a. Asiakas pääsee oikeaan määränpäähän","b. Viittomakielen taito","c. Erityisammatti"], answer:"a. Asiakas pääsee oikeaan määränpäähän" },
+  { question:"20) Missä kuljetuksissa tulee ajoneuvossa olla alkolukko?", options:["a. Kansaneläkelaitoksen tilaamissa kuljetuksissa","b. Koulu- ja päivähoitokuljetuksissa","c. Vammaispalvelulain mukaisissa terveydenhuollon kuljetuksissa"], answer:"b. Koulu- ja päivähoitokuljetuksissa" }
+];
+
+let current = 0;
+let userAnswers = Array(quiz.length).fill(null);
+
+function loadQuestion() {
+  const q = quiz[current];
+  document.getElementById("question").innerText = q.question;
+
+  const optionsDiv = document.getElementById("options");
+  optionsDiv.innerHTML = "";
+
+  q.options.forEach(option => {
+    const btn = document.createElement("button");
+    btn.classList.add("option-btn");
+    btn.innerText = option;
+
+    // Highlight if previously selected
+    if(userAnswers[current] === option) btn.classList.add("selected");
+
+    btn.onclick = () => selectAnswer(option);
+    optionsDiv.appendChild(btn);
+  });
+
+  // Show feedback if answered
+  const feedback = document.getElementById("feedback");
+  if(userAnswers[current]){
+    feedback.innerText = userAnswers[current] === q.answer ? "✅ Correct!" : "❌ Wrong! Correct: " + q.answer;
+    feedback.style.color = userAnswers[current] === q.answer ? "green" : "red";
+  } else {
+    feedback.innerText = "";
+  }
+
+  document.getElementById("progress").innerText = `Question ${current+1} of ${quiz.length}`;
+}
+
+function selectAnswer(option){
+  userAnswers[current] = option;
+
+  // Update feedback
+  const feedback = document.getElementById("feedback");
+  if(option === quiz[current].answer){
+    feedback.innerText = "✅ Correct!";
+    feedback.style.color = "green";
+  } else {
+    feedback.innerText = "❌ Wrong! Correct: " + quiz[current].answer;
+    feedback.style.color = "red";
+  }
+
+  // Highlight selected
+  const buttons = document.querySelectorAll(".option-btn");
+  buttons.forEach(btn => btn.classList.remove("selected"));
+  buttons.forEach(btn => { if(btn.innerText===option) btn.classList.add("selected"); });
+}
+
+function nextQuestion(){
+  if(current < quiz.length-1){
+    current++;
+    loadQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function prevQuestion(){
+  if(current > 0){
+    current--;
+    loadQuestion();
+  }
+}
+
+function showResult(){
+  const totalCorrect = userAnswers.filter((ans, i) => ans === quiz[i].answer).length;
+  document.getElementById("question").innerText = `🎉 Quiz Completed! Your score: ${totalCorrect} / ${quiz.length}`;
+  document.getElementById("options").innerHTML = "";
+  document.getElementById("feedback").innerText = "";
+  document.querySelector(".nav-buttons").style.display = "none";
+  document.getElementById("progress").innerText = "";
+}
+
+// Load first question
+loadQuestion();
+</script>
+
+</body>
+</html>
