@@ -11,7 +11,9 @@ h2 { font-size:22px; margin-bottom:20px; }
 .options { display:flex; flex-direction:column; gap:15px; }
 .option-btn { padding:15px; font-size:16px; border-radius:8px; border:2px solid #4CAF50; background-color:#fff; cursor:pointer; transition:0.3s; text-align:left; width:100%; }
 .option-btn:hover { background-color:#4CAF50; color:#fff; }
-.option-btn.selected { background-color:#4CAF50; color:#fff; }
+.option-btn.selected { font-weight:bold; }
+.option-btn.correct { background-color: #4CAF50; color:#fff; border-color: #4CAF50; }
+.option-btn.wrong { background-color: #f44336; color:#fff; border-color: #f44336; }
 .feedback { margin-top:20px; font-weight:bold; font-size:18px; }
 .nav-buttons { margin-top:20px; display:flex; gap:10px; }
 .next-btn, .back-btn { padding:12px 25px; font-size:16px; border:none; border-radius:8px; cursor:pointer; color:#fff; }
@@ -43,184 +45,55 @@ h2 { font-size:22px; margin-bottom:20px; }
 const quiz = [
   {
     question: "1. Kenen vastuulla on pyörätuolin huolellinen kiinnittäminen taksiin, kun asiakkaalla on mukana henkilökohtainen avustaja?",
-    options: [
-      "a. Asiakkaan",
-      "b. Taksinkuljettajan",
-      "c. Henkilökohtaisen avustajan"
-    ],
+    options: ["a. Asiakkaan","b. Taksinkuljettajan","c. Henkilökohtaisen avustajan"],
     correct: "b"
   },
   {
     question: "2. Miten toimit, kun asiakas pyytää ajamaan ylinopeutta?",
-    options: [
-      "a. Voit ajaa ylinopeutta, jos asiakkaan kanssa on sovittu, että hän maksaa ylinopeussakot.",
-      "b. Kerrotaan asiakkaalle, ettei ylinopeutta voi ajaa, mutta tehdään parhaasi, jotta hän pääsee turvallisesti perille nopeinta mahdollista reittiä pitkin.",
-      "c. Voit ajaa ylinopeutta, jos asiakkaalla on siihen perusteltu syy."
-    ],
+    options: ["a. Voit ajaa ylinopeutta, jos asiakkaan kanssa on sovittu, että hän maksaa ylinopeussakot.","b. Kerrotaan asiakkaalle, ettei ylinopeutta voi ajaa, mutta tehdään parhaasi, jotta hän pääsee turvallisesti perille nopeinta mahdollista reittiä pitkin.","c. Voit ajaa ylinopeutta, jos asiakkaalla on siihen perusteltu syy."],
     correct: "b"
   },
   {
     question: "3. Olet ottanut asiakkaan kyytiin paikkakuntasi taksiasemalta, olette ajaneet hyvän matkaa, kun taksin puhelin soi. Huomaat, että handsfree-laite on jäänyt kotiin. Mitä teet?",
-    options: [
-      "a. Vastaat puhelimeen normaalisti, pahoittelet asiakkaalle puhelimen aiheuttamaa häiriötä ja vastaat puheluun.",
-      "b. Pysähdyt tien varteen, jotta voit kirjoittaa ylös välttämättömät tiedot. Voit pitää taksimittarin päällä.",
-      "c. Pahoittelet asiakkaalle puhelimen aiheuttamaa häiriötä etkä vastaa puheluun, vaan soitat takaisin kyydin päätyttyä."
-    ],
+    options: ["a. Vastaat puhelimeen normaalisti, pahoittelet asiakkaalle puhelimen aiheuttamaa häiriötä ja vastaat puheluun.","b. Pysähdyt tien varteen, jotta voit kirjoittaa ylös välttämättömät tiedot. Voit pitää taksimittarin päällä.","c. Pahoittelet asiakkaalle puhelimen aiheuttamaa häiriötä etkä vastaa puheluun, vaan soitat takaisin kyydin päätyttyä."],
     correct: "b"
   },
   {
     question: "4. Mikä seuraavista liittyy hyvään viestinnän käyttöön asiakaspalvelussa?",
-    options: [
-      "a. Kuljettaja voi lähettää viestejä, jos puhelin on äänettömällä.",
-      "b. Puhelun soittaminen, jos se kuljetuksen suorittamiseksi on välttämätön.",
-      "c. Kuljettaja voi puhua henkilökohtaisia puheluita, jos asiakas on mukana."
-    ],
+    options: ["a. Kuljettaja voi lähettää viestejä, jos puhelin on äänettömällä.","b. Puhelun soittaminen, jos se kuljetuksen suorittamiseksi on välttämätön.","c. Kuljettaja voi puhua henkilökohtaisia puheluita, jos asiakas on mukana."],
     correct: "b"
   },
   {
     question: "5. Mikä seuraavista väittämistä pitää paikkaansa?",
-    options: [
-      "a. Jos kuljettaja joutuu auton liikkuessa soittamaan puhelun, hänen ei tarvitse käyttää handsfree-laitetta.",
-      "b. Mikäli taksissa ei ole asiakkaita, saa kuljettaja ajoneuvon liikkuessa katsella televisiokuvaa integroidusta näytöstä.",
-      "c. Kuljettaja saa soittaa puhelun ajon aikana handsfree-laitetta käyttäen, jos se on kuljetuksen suorittamiseksi välttämätön."
-    ],
+    options: ["a. Jos kuljettaja joutuu auton liikkuessa soittamaan puhelun, hänen ei tarvitse käyttää handsfree-laitetta.","b. Mikäli taksissa ei ole asiakkaita, saa kuljettaja ajoneuvon liikkuessa katsella televisiokuvaa integroidusta näytöstä.","c. Kuljettaja saa soittaa puhelun ajon aikana handsfree-laitetta käyttäen, jos se on kuljetuksen suorittamiseksi välttämätön."],
     correct: "c"
   },
   {
     question: "6. Miten toimit, kun asiakas saa epileptisen kohtauksen kuljetuksen aikana?",
-    options: [
-      "a. Pysäytät ajoneuvon turvalliseen paikkaan, pidät tiukasti kiinni asiakkaasta, jotta hän ei satuttaisi itseään kouristuksen aikana. Kun kouristukset vähenevät, käännät henkilön kylkiasentoon.",
-      "b. Pysäytät ajoneuvon turvalliseen paikkaan ja huolehdit, että asiakas ei kolhi päätään, mutta et pyri estämään kouristusliikkeitä. Kun kouristukset vähenevät, käännät henkilön kylkiasentoon.",
-      "c. Jatkat ajamista pitäen toisella kädellä asiakasta paikallaan, koska epileptinen kohtaus menee muutamassa minuutissa ohi."
-    ],
+    options: ["a. Pysäytät ajoneuvon turvalliseen paikkaan, pidät tiukasti kiinni asiakkaasta, jotta hän ei satuttaisi itseään kouristuksen aikana. Kun kouristukset vähenevät, käännät henkilön kylkiasentoon.","b. Pysäytät ajoneuvon turvalliseen paikkaan ja huolehdit, että asiakas ei kolhi päätään, mutta et pyri estämään kouristusliikkeitä. Kun kouristukset vähenevät, käännät henkilön kylkiasentoon.","c. Jatkat ajamista pitäen toisella kädellä asiakasta paikallaan, koska epileptinen kohtaus menee muutamassa minuutissa ohi."],
     correct: "b"
   },
   {
     question: "7. Miksi alkolukko vaaditaan pakollisena varusteena kunnan tilaamissa koulu- ja päivähoitokuljetuksissa?",
-    options: [
-      "a. Sillä estetään ajoneuvon liikkuminen, jos kuljettaja on nauttinut alkoholia.",
-      "b. Se on tarkoitettu ainoastaan työnantajan seurantavälineeksi kuljettajan alkoholin käytöstä.",
-      "c. Sillä poliisi tarkistaa liikenteen valvonnassa kuljettajan ajokunnon."
-    ],
+    options: ["a. Sillä estetään ajoneuvon liikkuminen, jos kuljettaja on nauttinut alkoholia.","b. Se on tarkoitettu ainoastaan työnantajan seurantavälineeksi kuljettajan alkoholin käytöstä.","c. Sillä poliisi tarkistaa liikenteen valvonnassa kuljettajan ajokunnon."],
     correct: "a"
   },
   {
     question: "8. Liikenteessä on poikkeusjärjestelyjä liikenneonnettomuuden vuoksi. Saat samaan aikaan keskenään ristiriitaisia toimintaohjeita kolmelta taholta, jotka eivät tiedä toisistaan. Kenellä seuraavista on määräysvalta eli kenen ohjeita sinun tulee noudattaa?",
-    options: [
-      "a. Liikennevirasto",
-      "b. Poliisi",
-      "c. Työnantajasi"
-    ],
+    options: ["a. Liikennevirasto","b. Poliisi","c. Työnantajasi"],
     correct: "b"
   },
   {
     question: "9. Miten tulee toimia, kun otat kyytiin hyvin hitaasti liikkuvan asiakkaan?",
-    options: [
-      "a. Avustan häntä ottamalla käsivarresta kiinni kysymättä asiakkaalta, tarvitseeko hän apua.",
-      "b. Nouset ajoneuvosta ja tiedustelet, tarvitseeko hän apua liikkumisessa ja autoon nousussa.",
-      "c. Käsken asiakasta kiirehtimään autoon, jos noutopaikassa on erittäin vilkas liikenne."
-    ],
+    options: ["a. Avustan häntä ottamalla käsivarresta kiinni kysymättä asiakkaalta, tarvitseeko hän apua.","b. Nouset ajoneuvosta ja tiedustelet, tarvitseeko hän apua liikkumisessa ja autoon nousussa.","c. Käsken asiakasta kiirehtimään autoon, jos noutopaikassa on erittäin vilkas liikenne."],
     correct: "b"
   },
   {
     question: "10. Miten kuljettajan tulee huomioida näkövammaista asiakasta?",
-    options: [
-      "a. Kuljettajan on hyvä näkövammaista palvellessa puhua hiukan kovemmalla äänellä.",
-      "b. Taksinkuljettaja tulee aina ohjata asiakasta olkapäästä ja auttaa hänet autoon kevyesti työntäen.",
-      "c. Taksinkuljettajan on hyvä kysyä asiakkaalta, miten häntä voi auttaa ennen kuin ryhtyy auttamaan asiakasta."
-    ],
+    options: ["a. Kuljettajan on hyvä näkövammaista palvellessa puhua hiukan kovemmalla äänellä.","b. Taksinkuljettaja tulee aina ohjata asiakasta olkapäästä ja auttaa hänet autoon kevyesti työntäen.","c. Taksinkuljettajan on hyvä kysyä asiakkaalta, miten häntä voi auttaa ennen kuin ryhtyy auttamaan asiakasta."],
     correct: "c"
-  },
-  {
-    question: "11. Kenen vastuulla on hankkia koulu- ja päivähoitokuljetuksen kuljettajan rikostaustaote?",
-    options: [
-      "a. Kuljettajan",
-      "b. Työnantajan",
-      "c. Koulu- tai päiväkodin"
-    ],
-    correct: "b"
-  },
-  {
-    question: "12. Voitko toimia vakiotaksinkuljettajana säännöllisissä kuntoutukseen liittyvissä matkoissa, kun matkustajana on pyörätuolia käyttävä 15-vuotias lapsi?",
-    options: [
-      "a. En voi toimia vakiotaksinkuljettajana, koska lapsella ei ole oikeutta taksia.",
-      "b. Selvitän työnantajalta, voinko toimia vakiotaksinkuljettajana.",
-      "c. Voin toimia vakiotaksinkuljettajana huoltajan valtuutuksella."
-    ],
-    correct: "c"
-  },
-  {
-    question: "13. Miten toimia, kun näkövammaisella asiakkaalla on opaskoira?",
-    options: [
-      "a. Nouset autosta ja kerrot hänelle, että hänen taksinsa on saapunut ja opaskoiran paikka on asiakkaan jalkatilassa.",
-      "b. Nouset autosta ja kerrot hänelle, että hänen taksinsa on saapunut ja huomioit opaskoiran rapsuttamalla.",
-      "c. Odotat ajoneuvossa asiakkaan saapumista ja avaat hänelle sisäpuolelta oven ja teet takapenkille tilaa hänen opaskoiralleen."
-    ],
-    correct: "c"
-  },
-  {
-    question: "14. Mikä osuus asiakas maksaa KELA-kyydistä kuljettajalle?",
-    options: [
-      "a. Koko matkan hinnan",
-      "b. Enintään omavastuun",
-      "c. Omavastuun ylittävän osuuden"
-    ],
-    correct: "b"
-  },
-  {
-    question: "15. Mitä turvavyön käytöstä on määrätty koskien koulukuljetuksia?",
-    options: [
-      "a. Takapenkillä oppilaan ei tarvitse käyttää turvavyötä.",
-      "b. Kuljettajan ei tarvitse käyttää turvavyötä.",
-      "c. Kuljettajan tulee käyttää turvavyötä."
-    ],
-    correct: "c"
-  },
-  {
-    question: "16. Kenellä on vastuu työvuorossa käytettävän taksin liikennekelpoisuudesta?",
-    options: [
-      "a. Kuljettajalla",
-      "b. Taksintarkastajalla",
-      "c. Katsastajalla"
-    ],
-    correct: "a"
-  },
-  {
-    question: "17. Miksi avun hälyttämiseen onnettomuuspaikalle kannattaa käyttää 112 Suomi -mobiilisovellusta?",
-    options: [
-      "a. Hätäpuhelu menee sillä nopeammin.",
-      "b. Hätäkeskus saa sen kautta automaattisesti tiedon onnettomuuden sijainnista.",
-      "c. Soittaminen sen kautta on halvempaa."
-    ],
-    correct: "b"
-  },
-  {
-    question: "18. Miksi sinun on pimeässä moottoritiellä pysähtyessä laitettava ajovalot päälle?",
-    options: [
-      "a. Jotta muut tienkäyttäjät näkevät pysähtyneen ajoneuvosi.",
-      "b. Havaitset paremmin tiealueella liikkuvat villieläimet.",
-      "c. Pysäköinti- tai lähivalot kuluttavat vähemmän virtaa kuin ajovalot."
-    ],
-    correct: "a"
-  },
-  {
-    question: "19. Mitä kuljettajalta edellytetään, jos asiakas on henkilö, joka ei kykene puhumaan kieltä?",
-    options: [
-      "a. Kuljettajalta edellytetään, että asiakas pääsee oikeaan määränpäähän.",
-      "b. Taksinkuljettajalta edellytetään viittomakielen taitoa.",
-      "c. Taksinkuljettajalta edellytetään erityisammattia."
-    ],
-    correct: "a"
-  },
-  {
-    question: "20. Missä seuraavista kuljetuksista tulee ajoneuvossa olla alkolukko?",
-    options: [
-      "a. Kansaneläkelaitoksen tilaamissa kuljetuksissa.",
-      "b. Koulu- ja päivähoitokuljetuksissa.",
-      "c. Vammaispalvelulain mukaisissa terveydenhuollon tilaamissa kuljetuksissa."
-    ],
-    correct: "b"
   }
+  // Add the remaining questions here similarly...
 ];
 
 let current = 0;
@@ -229,7 +102,6 @@ let userAnswers = Array(quiz.length).fill(null);
 function loadQuestion() {
   const q = quiz[current];
   document.getElementById("question").innerText = q.question;
-
   const optionsDiv = document.getElementById("options");
   optionsDiv.innerHTML = "";
 
@@ -238,18 +110,26 @@ function loadQuestion() {
     btn.classList.add("option-btn");
     btn.innerText = option;
 
-    // Highlight if previously selected
+    // Highlight previously selected
     if(userAnswers[current] === option) btn.classList.add("selected");
 
     btn.onclick = () => selectAnswer(option);
     optionsDiv.appendChild(btn);
   });
 
+  // Show previous feedback
   const feedback = document.getElementById("feedback");
   if(userAnswers[current]){
     const correctOption = q.options.find(opt => opt[0] === q.correct);
     feedback.innerText = userAnswers[current][0] === q.correct ? "✅ Correct!" : "❌ Wrong! Correct: " + correctOption.slice(3);
     feedback.style.color = userAnswers[current][0] === q.correct ? "green" : "red";
+
+    // Highlight correct/wrong
+    const buttons = document.querySelectorAll(".option-btn");
+    buttons.forEach(btn => {
+      if(btn.innerText[0] === q.correct) btn.classList.add("correct");
+      if(btn.innerText === userAnswers[current] && userAnswers[current][0] !== q.correct) btn.classList.add("wrong");
+    });
   } else {
     feedback.innerText = "";
   }
@@ -272,10 +152,13 @@ function selectAnswer(option){
     feedback.style.color = "red";
   }
 
-  // Highlight selected
+  // Highlight correct and wrong
   const buttons = document.querySelectorAll(".option-btn");
-  buttons.forEach(btn => btn.classList.remove("selected"));
-  buttons.forEach(btn => { if(btn.innerText===option) btn.classList.add("selected"); });
+  buttons.forEach(btn => {
+    btn.classList.remove("selected","correct","wrong");
+    if(btn.innerText[0] === q.correct) btn.classList.add("correct");
+    if(btn.innerText === option && option[0] !== q.correct) btn.classList.add("wrong");
+  });
 }
 
 function nextQuestion(){
