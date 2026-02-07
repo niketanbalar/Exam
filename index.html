@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -546,6 +546,265 @@ function showResult(){
 }
 
 loadQuestion();
+</script>
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taxi Exam Quiz</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin:0;
+  padding:20px;
+}
+
+.quiz-container {
+  max-width:700px;
+  margin:auto;
+  background:#fff;
+  padding:30px;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+.top-buttons {
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.set-btn {
+  padding:12px 20px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  color:#fff;
+  background:#2196F3;
+}
+
+.set-btn.active {
+  background:#4CAF50;
+}
+
+h2 {
+  font-size:22px;
+  margin-bottom:20px;
+}
+
+.options {
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
+
+.option-btn {
+  padding:15px;
+  font-size:16px;
+  border-radius:8px;
+  border:2px solid #4CAF50;
+  background:#fff;
+  cursor:pointer;
+  text-align:left;
+}
+
+.option-btn.correct {
+  background:#4CAF50;
+  color:#fff;
+}
+
+.option-btn.wrong {
+  background:#f44336;
+  color:#fff;
+}
+
+.feedback {
+  margin-top:20px;
+  font-weight:bold;
+  font-size:18px;
+}
+
+.nav-buttons {
+  margin-top:20px;
+  display:flex;
+  gap:10px;
+}
+
+.next-btn, .back-btn {
+  padding:12px 25px;
+  font-size:16px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  color:#fff;
+}
+
+.next-btn {
+  background:#2196F3;
+}
+
+.next-btn:disabled {
+  background:#9E9E9E;
+  cursor:not-allowed;
+}
+
+.back-btn {
+  background:#9E9E9E;
+}
+
+.progress {
+  margin-top:10px;
+  font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="quiz-container">
+
+  <!-- TOP QUESTION SET BUTTONS -->
+  <div class="top-buttons">
+    <button class="set-btn" onclick="loadSet('q44', this)">44 Que</button>
+    <button class="set-btn" onclick="loadSet('q50', this)">50 Que</button>
+    <button class="set-btn" onclick="loadSet('extra', this)">Extra Que</button>
+  </div>
+
+  <h2 id="question">Select a question set</h2>
+  <div class="options" id="options"></div>
+  <div class="feedback" id="feedback"></div>
+
+  <div class="nav-buttons" style="display:none;">
+    <button class="back-btn" onclick="prevQuestion()">Back</button>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
+  </div>
+
+  <div class="progress" id="progress"></div>
+</div>
+
+<script>
+// ---------------- QUESTION SETS ----------------
+
+const questionSets = {
+
+q44: [
+  {
+    question: "44. Mitä seuraavista vaihtoehdoista on oikea kuljettajan toimintatapa, kun taksissa on tulossa näkövammainen asiakas?",
+    options: [
+      "a. Kysyt asiakkaalta, miten häntä voi parhaiten auttaa ja kerrot, missä suunnassa ajoneuvo on.",
+      "b. Kysyt asiakkaalta, kuinka kovalla äänellä hänen kanssaan tulee kommunikoida.",
+      "c. Kuljettajan tehtäviin ei kuulu asiakkaan erityistarpeiden huomioiminen."
+    ],
+    correct: "a"
+  }
+],
+
+q50: [
+  {
+    question: "50. kenen vastuulla on pörätuolin huolellinen kiinnittäminen taksiin, Kun asiakkaan on mukana henkilökohtainen avustaja?",
+    options: [
+      "a) Asiakkaai.",
+      "b) Taksinkuljettaja.",
+      "c) Henkilökohtaisen avustaja."
+    ],
+    correct: "b"
+  }
+],
+
+extra: [
+  {
+    question: "Extra. Miten tulee toimia, kun asiakas saa epileptisen kohtauksen kuljetuksen aikana?",
+    options: [
+      "a. Pidät tiukasti kiinni asiakkaasta.",
+      "b. Pysäytät ajoneuvon turvallisesti ja huolehdit, ettei asiakas kolhi päätään.",
+      "c. Jatkat ajamista normaalisti."
+    ],
+    correct: "b"
+  }
+]
+
+};
+
+// ---------------- QUIZ LOGIC ----------------
+
+let quiz = [];
+let current = 0;
+let userAnswers = [];
+
+function loadSet(setName, btn){
+  quiz = questionSets[setName];
+  current = 0;
+  userAnswers = Array(quiz.length).fill(null);
+
+  document.querySelectorAll(".set-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+
+  document.querySelector(".nav-buttons").style.display = "flex";
+  loadQuestion();
+}
+
+function loadQuestion(){
+  const q = quiz[current];
+  document.getElementById("question").innerText = q.question;
+  document.getElementById("options").innerHTML = "";
+  document.getElementById("feedback").innerText = "";
+  document.getElementById("nextBtn").disabled = true;
+
+  q.options.forEach(option => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.innerText = option;
+    btn.onclick = () => selectAnswer(option);
+    document.getElementById("options").appendChild(btn);
+  });
+
+  document.getElementById("progress").innerText =
+    `Question ${current + 1} of ${quiz.length}`;
+}
+
+function selectAnswer(option){
+  userAnswers[current] = option;
+  document.getElementById("nextBtn").disabled = false;
+
+  const q = quiz[current];
+  const buttons = document.querySelectorAll(".option-btn");
+
+  buttons.forEach(btn => {
+    btn.disabled = true;
+    if(btn.innerText[0] === q.correct) btn.classList.add("correct");
+    if(btn.innerText === option && option[0] !== q.correct) btn.classList.add("wrong");
+  });
+
+  document.getElementById("feedback").innerText =
+    option[0] === q.correct ? "✅ Correct!" : "❌ Wrong!";
+}
+
+function nextQuestion(){
+  if(current < quiz.length - 1){
+    current++;
+    loadQuestion();
+  } else {
+    document.getElementById("question").innerText = "🎉 Quiz Completed";
+    document.getElementById("options").innerHTML = "";
+    document.getElementById("feedback").innerText = "";
+    document.querySelector(".nav-buttons").style.display = "none";
+    document.getElementById("progress").innerText = "";
+  }
+}
+
+function prevQuestion(){
+  if(current > 0){
+    current--;
+    loadQuestion();
+  }
+}
 </script>
 
 </body>
