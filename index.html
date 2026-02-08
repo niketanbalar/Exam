@@ -4,115 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Taxi Exam Quiz</title>
-
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  margin:0;
-  padding:20px;
-}
-
-.quiz-container {
-  max-width:700px;
-  margin:auto;
-  background:#fff;
-  padding:30px;
-  border-radius:12px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
-}
-
-.top-buttons {
-  display:flex;
-  gap:10px;
-  margin-bottom:20px;
-  flex-wrap: wrap;
-}
-
-.set-btn {
-  padding:12px 20px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  color:#fff;
-  background:#2196F3;
-}
-
-.set-btn.active {
-  background:#4CAF50;
-}
-
-h2 {
-  font-size:22px;
-  margin-bottom:20px;
-}
-
-.options {
-  display:flex;
-  flex-direction:column;
-  gap:15px;
-}
-
-.option-btn {
-  padding:15px;
-  font-size:16px;
-  border-radius:8px;
-  border:2px solid #4CAF50;
-  background:#fff;
-  cursor:pointer;
-  text-align:left;
-}
-
-.option-btn.correct {
-  background:#4CAF50;
-  color:#fff;
-}
-
-.option-btn.wrong {
-  background:#f44336;
-  color:#fff;
-}
-
-.feedback {
-  margin-top:20px;
-  font-weight:bold;
-  font-size:18px;
-}
-
-.nav-buttons {
-  margin-top:20px;
-  display:flex;
-  gap:10px;
-}
-
-.next-btn, .back-btn {
-  padding:12px 25px;
-  font-size:16px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  color:#fff;
-}
-
-.next-btn {
-  background:#2196F3;
-}
-
-.next-btn:disabled {
-  background:#9E9E9E;
-}
-
-.back-btn {
-  background:#9E9E9E;
-}
-
-.progress {
-  margin-top:10px;
-  font-size:14px;
-}
+body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin:0; padding:20px; }
+.quiz-container { max-width:700px; margin:auto; background:#fff; padding:30px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+.top-buttons { display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+.set-btn { padding:12px 20px; border:none; border-radius:8px; cursor:pointer; color:#fff; background:#2196F3; }
+.set-btn.active { background:#4CAF50; }
+h2 { font-size:22px; margin-bottom:20px; }
+.options { display:flex; flex-direction:column; gap:15px; }
+.option-btn { padding:15px; font-size:16px; border-radius:8px; border:2px solid #4CAF50; background:#fff; cursor:pointer; text-align:left; }
+.option-btn.correct { background:#4CAF50; color:#fff; }
+.option-btn.wrong { background:#f44336; color:#fff; }
+.feedback { margin-top:20px; font-weight:bold; font-size:18px; }
+.nav-buttons { margin-top:20px; display:flex; gap:10px; }
+.next-btn, .back-btn { padding:12px 25px; font-size:16px; border:none; border-radius:8px; cursor:pointer; color:#fff; }
+.next-btn { background:#2196F3; }
+.next-btn:disabled { background:#9E9E9E; }
+.back-btn { background:#9E9E9E; }
+.progress { margin-top:10px; font-size:14px; }
 </style>
 </head>
-
 <body>
 
 <div class="quiz-container">
@@ -122,7 +33,7 @@ h2 {
     <button class="set-btn" onclick="loadSet('q44', this)">44 Que</button>
     <button class="set-btn" onclick="loadSet('q50', this)">50 Que</button>
     <button class="set-btn" onclick="loadSet('extra', this)">Extra Que</button>
-    <button class="set-btn" id="readBtn" onclick="showReadAnswers()">Just Read Ans</button>
+    <button class="set-btn" onclick="showReadAnswers(this)">Just Read Ans</button>
   </div>
 
   <h2 id="question">Select a question set</h2>
@@ -139,59 +50,47 @@ h2 {
 
 <script>
 // ---------------- READ-ONLY ANSWERS ----------------
-
 const readAnswers = [
 "(51) 350 euro",
 "(52) Liikeenne valvoja",
-"(53) Jos Paikka ei turvallinen pysahtymiselle etsin toisen paikan koska vastuullasi on asiakkaan turvallinen ajoneuvosta poistuminen",
-"(54) Kun olet mennossa kadun toiselle puolella",
-"(55) tule nousta autosta ja kysyt asiakkaalta mitenvoit autta",
-"(56) neuvoun asiakasta soittamaan kelan palvelunumeroon",
-"(57) kysyn Miten voin autta ja kerron missa suunassa ajoneuvo on ja tarvitseeko hanapua",
-"(58) pyydan lapselta hänen vanhemmin puhellinumero",
-"(60) soitan tyontajalle ja kerron tilanteesta",
-"(61) koiralla on tunnistevaljaat.",
-"(62) Hartiavyolla, lantiovyolla Ja jalkavyolla",
-"(63) pimealla autossa tulisi pita sisavalo paalla kommunikointi tilantssa",
-"(64) tillaan asiakkalle toisen taksia, jossa asiakasta on turvallisempi kuljettaa."
+"(53) Jos paikka ei turvallinen pysäköimiselle etsin toisen paikan koska vastuullasi on asiakkaan turvallinen ajoneuvosta poistuminen",
+"(54) Kun olet menossa kadun toiselle puolella",
+"(55) Nouse autosta ja kysy asiakkaalta miten voit auttaa",
+"(56) Neuvon asiakasta soittamaan Kelan palvelunumeroon",
+"(57) Kysyn miten voin auttaa ja kerron missä suunnassa ajoneuvo on ja tarvitseeko hän apua",
+"(58) Pyydän lapselta hänen vanhemman puhelinnumero",
+"(60) Soitan työnantajalle ja kerron tilanteesta",
+"(61) Koiralla on tunnistevaljaat",
+"(62) Hartiavyöllä, lantiovyöllä ja jalkavyöllä",
+"(63) Pimeällä autossa tulisi pitää sisävalo päällä kommunikointia varten",
+"(64) Tilaan asiakkaalle toisen taksin, jossa asiakasta on turvallisempi kuljettaa",
+"(65) Sinun tulee puuttua asiaan ja keskustella asianosaisten kanssa ja ilmoittaa asiasta oppilaitokseen",
+"(66) Sinun tulee odottaa asiakkaan kanssa, kunnes avustaja saapuu paikalle",
+"(67) Sinun tulee kieltäytyä kuljettamisesta",
+"(68) Pyydät jotakuta soittamaan huoltajalleen ja pyytämään tätä tulemaan lasten vastaan kerrostalon pihalle",
+"(69) Kyllä saa, jos kuljettaja huolehtii asiakkaan sähkökäyttöisen mopon kiinnittämisestä ajoneuvoon",
+"(70) Sinun tulee poistua autosta ja auttaa matkustajaa tarvittaessa",
+"(71) Rauhoittele häntä puhumalla rauhallisesti ja ystävällisesti",
+"(72) Huolehdi, että … aikana",
+"(73) Täytä autosi … asiakkaan kyydin",
+"(74) Aina jos … asiakkaan",
+"(75) … varmistanut",
+"(76) Kuljettaja … puheella"
 ];
 
 // ---------------- QUESTION SETS ----------------
-
 const questionSets = {
-
 q44: [
-  {
-    question: "1. Kuinka paljon taksissa saa enintään ylittää istuinpaikkaluvun?",
-    options: ["a. Ei yhtään","b. Enintään 30%","c. Kuljettajan harkinnan mukaan"],
-    correct: "a"
-  }
+  { question: "1. Kuinka paljon taksissa saa enintään ylittää istuinpaikkaluvun?", options: ["a. Ei yhtään","b. Enintään 30%","c. Kuljettajan harkinnan mukaan"], correct: "a" }
 ],
-
 q50: [
-  {
-    question: "1. Kenen vastuulla on pyörätuolin kiinnittäminen?",
-    options: ["a. Asiakkaan","b. Taksinkuljettajan","c. Avustajan"],
-    correct: "b"
-  }
+  { question: "1. Kenen vastuulla on pyörätuolin kiinnittäminen?", options: ["a. Asiakkaan","b. Taksinkuljettajan","c. Avustajan"], correct: "b" }
 ],
-
 extra: [
-  {
-    question: "1. Mikä seuraavista on oikein liittyen taksipalveluun?",
-    options: [
-      "A. Kuitin tarjoaminen asiakkaalle on vapaaehtoista.",
-      "B. Kuitin tarjoaminen asiakkaalle on pakollista.",
-      "C. Kuitin tarjoaminen asiakkaalle on lisämaksullinen palvelu."
-    ],
-    correct: "B"
-  }
-]
-
-};
+  { question: "1. Mikä seuraavista on oikein liittyen taksipalveluun?", options: ["A. Kuitin tarjoaminen asiakkaalle on vapaaehtoista.","B. Kuitin tarjoaminen asiakkaalle on pakollista.","C. Kuitin tarjoaminen asiakkaalle on lisämaksullinen palvelu."], correct: "B" }
+];
 
 // ---------------- QUIZ LOGIC ----------------
-
 let quiz = [];
 let current = 0;
 let userAnswers = [];
@@ -200,10 +99,8 @@ function loadSet(setName, btn){
   quiz = questionSets[setName];
   current = 0;
   userAnswers = Array(quiz.length).fill(null);
-
   document.querySelectorAll(".set-btn").forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
-
   document.querySelector(".nav-buttons").style.display = "flex";
   loadQuestion();
 }
@@ -223,35 +120,39 @@ function loadQuestion(){
     document.getElementById("options").appendChild(btn);
   });
 
-  document.getElementById("progress").innerText =
-    `Question ${current + 1} of ${quiz.length}`;
+  document.getElementById("progress").innerText = `Question ${current+1} of ${quiz.length}`;
 }
 
 function selectAnswer(option){
   userAnswers[current] = option;
   document.getElementById("nextBtn").disabled = false;
-
   const q = quiz[current];
   const buttons = document.querySelectorAll(".option-btn");
-
   buttons.forEach(btn => {
     btn.disabled = true;
     if(btn.innerText[0] === q.correct) btn.classList.add("correct");
     if(btn.innerText === option && option[0] !== q.correct) btn.classList.add("wrong");
   });
-
-  document.getElementById("feedback").innerText =
-    option[0] === q.correct ? "✅ Correct!" : "❌ Wrong!";
+  document.getElementById("feedback").innerText = option[0] === q.correct ? "✅ Correct!" : "❌ Wrong!";
 }
 
 function nextQuestion(){
-  if(current < quiz.length - 1){
-    current++;
-    loadQuestion();
-  } else {
-    document.getElementById("question").innerText = "🎉 Quiz Completed";
-    document.getElementById("options").innerHTML = "";
-    document.querySelector(".nav-buttons").style.display = "none";
-    document.getElementById("progress").innerText = "";
-  }
+  if(current < quiz.length-1){ current++; loadQuestion(); }
+  else { document.getElementById("question").innerText="🎉 Quiz Completed"; document.getElementById("options").innerHTML=""; document.querySelector(".nav-buttons").style.display="none"; document.getElementById("progress").innerText=""; }
 }
+
+function prevQuestion(){ if(current>0){ current--; loadQuestion(); } }
+
+// ---------------- JUST READ ANSWERS ----------------
+function showReadAnswers(btn){
+  document.querySelectorAll(".set-btn").forEach(b => b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  document.getElementById("question").innerText = "Just Read Answers";
+  document.getElementById("options").innerHTML = readAnswers.map(a => `<div>• ${a}</div>`).join("");
+  document.getElementById("feedback").innerText = "";
+  document.querySelector(".nav-buttons").style.display = "none";
+  document.getElementById("progress").innerText = "";
+}
+</script>
+</body>
+</html>
