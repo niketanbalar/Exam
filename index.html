@@ -26,6 +26,7 @@ body {
   display:flex;
   gap:10px;
   margin-bottom:20px;
+  flex-wrap: wrap;
 }
 
 .set-btn {
@@ -99,7 +100,6 @@ h2 {
 
 .next-btn:disabled {
   background:#9E9E9E;
-  cursor:not-allowed;
 }
 
 .back-btn {
@@ -117,14 +117,12 @@ h2 {
 
 <div class="quiz-container">
 
-  <!-- TOP QUESTION SET BUTTONS -->
+  <!-- TOP BUTTONS -->
   <div class="top-buttons">
     <button class="set-btn" onclick="loadSet('q44', this)">44 Que</button>
     <button class="set-btn" onclick="loadSet('q50', this)">50 Que</button>
     <button class="set-btn" onclick="loadSet('extra', this)">Extra Que</button>
-
-    <!-- ✅ NEW BUTTON ONLY -->
-    <button class="set-btn" onclick="showReadAnswers()">Just Read Ans</button>
+    <button class="set-btn" id="readBtn" onclick="showReadAnswers()">Just Read Ans</button>
   </div>
 
   <h2 id="question">Select a question set</h2>
@@ -140,74 +138,60 @@ h2 {
 </div>
 
 <script>
-// ---------------- QUESTION SETS ----------------
-const questionSets = {
-  q44: [
-    {
-      question: "1. olet viemässă asiakas sairaalasta kotlin, yhtäkkla huomaat ulosajaneen",
-      options: [
-        "a. vaati, ettă viet hänet välittömästi kotiin.",
-        "b. Viet asiakkaan kotin ja palaat sen jalkeen turmapalkalle.",
-        "c. pysahoyt tapahtumapaikalla la sollat hatanumeroon,"
-      ],
-      correct: "c"
-    },
-    {
-      question: "1. Kenen vastuulla on pyörätuolin huolellinen kiinnittäminen taksiin?",
-      options: ["a. Asiakkaan","b. Taksinkuljettajan","c. Henkilökohtaisen avustajan"],
-      correct: "b"
-    }
-  ],
+// ---------------- READ-ONLY ANSWERS ----------------
 
-  q50: [
-    {
-      question: "1. Kenen vastuulla on pyörätuolin huolellinen kiinnittäminen taksiin?",
-      options: ["a. Asiakkaan","b. Taksinkuljettajan","c. Henkilökohtaisen avustajan"],
-      correct: "b"
-    }
-  ],
-
-  extra: [
-    {
-      question: "1. Mikä seuraavista on oikein liittyen taksipalveluun?",
-      options: [
-        "A. Kuitin tarjoaminen asiakkaalle on vapaaehtoista.",
-        "B. Kuitin tarjoaminen asiakkaalle on pakollista",
-        "C. Kuitin tarjoaminen asiakkaalle on lisämaksullinen palvelu."
-      ],
-      correct: "B"
-    }
-  ]
-};
-
-// ---------------- READ ANSWERS (NEW) ----------------
 const readAnswers = [
 "(51) 350 euro",
-"(52) Liikenne valvoja",
-"(53) Jos Paikka ei turvallinen pysahtymiselle etsin toisen paikan",
+"(52) Liikeenne valvoja",
+"(53) Jos Paikka ei turvallinen pysahtymiselle etsin toisen paikan koska vastuullasi on asiakkaan turvallinen ajoneuvosta poistuminen",
 "(54) Kun olet mennossa kadun toiselle puolella",
 "(55) tule nousta autosta ja kysyt asiakkaalta mitenvoit autta",
 "(56) neuvoun asiakasta soittamaan kelan palvelunumeroon",
-"(57) kysyn Miten voin autta ja kerron missa suunassa ajoneuvo on",
+"(57) kysyn Miten voin autta ja kerron missa suunassa ajoneuvo on ja tarvitseeko hanapua",
 "(58) pyydan lapselta hänen vanhemmin puhellinumero",
 "(60) soitan tyontajalle ja kerron tilanteesta",
 "(61) koiralla on tunnistevaljaat.",
 "(62) Hartiavyolla, lantiovyolla Ja jalkavyolla",
-"(63) pimealla autossa tulisi pita sisavalo paalla",
-"(64) tillaan asiakkalle toisen taksia",
-"(65) keskustella asiasta ja ilmoittaa oppilaitokseen",
-"(66) odotat asiakkaan kanssa kunnes avustaja saapuu",
-"(67) kieltäydyt kuljettamisesta",
-"(68) pyydät soittamaan huoltajalle",
-"(69) kyllä saa",
-"(70) poistut autosta ja autat",
-"(71) rauhoittelet asiakasta",
-"Bus – B",
-"Cycle and humans",
-"Extreme cold weather outside"
+"(63) pimealla autossa tulisi pita sisavalo paalla kommunikointi tilantssa",
+"(64) tillaan asiakkalle toisen taksia, jossa asiakasta on turvallisempi kuljettaa."
 ];
 
+// ---------------- QUESTION SETS ----------------
+
+const questionSets = {
+
+q44: [
+  {
+    question: "1. Kuinka paljon taksissa saa enintään ylittää istuinpaikkaluvun?",
+    options: ["a. Ei yhtään","b. Enintään 30%","c. Kuljettajan harkinnan mukaan"],
+    correct: "a"
+  }
+],
+
+q50: [
+  {
+    question: "1. Kenen vastuulla on pyörätuolin kiinnittäminen?",
+    options: ["a. Asiakkaan","b. Taksinkuljettajan","c. Avustajan"],
+    correct: "b"
+  }
+],
+
+extra: [
+  {
+    question: "1. Mikä seuraavista on oikein liittyen taksipalveluun?",
+    options: [
+      "A. Kuitin tarjoaminen asiakkaalle on vapaaehtoista.",
+      "B. Kuitin tarjoaminen asiakkaalle on pakollista.",
+      "C. Kuitin tarjoaminen asiakkaalle on lisämaksullinen palvelu."
+    ],
+    correct: "B"
+  }
+]
+
+};
+
 // ---------------- QUIZ LOGIC ----------------
+
 let quiz = [];
 let current = 0;
 let userAnswers = [];
@@ -264,26 +248,10 @@ function nextQuestion(){
   if(current < quiz.length - 1){
     current++;
     loadQuestion();
+  } else {
+    document.getElementById("question").innerText = "🎉 Quiz Completed";
+    document.getElementById("options").innerHTML = "";
+    document.querySelector(".nav-buttons").style.display = "none";
+    document.getElementById("progress").innerText = "";
   }
 }
-
-function prevQuestion(){
-  if(current > 0){
-    current--;
-    loadQuestion();
-  }
-}
-
-// ---------------- SHOW READ ANSWERS (NEW) ----------------
-function showReadAnswers(){
-  document.getElementById("question").innerText = "Just Read Answers";
-  document.getElementById("options").innerHTML =
-    readAnswers.map(a => `<div>${a}</div>`).join("");
-  document.getElementById("feedback").innerText = "";
-  document.querySelector(".nav-buttons").style.display = "none";
-  document.getElementById("progress").innerText = "";
-}
-</script>
-
-</body>
-</html>
