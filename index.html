@@ -425,7 +425,7 @@ q90: [
     correct: "b"
   },
  {
-  "question": "14. Miten toimit, kun kyydissa olevan asiakas pytaa ajamaan ylinopeutta? *",
+  "question": "14. Miten toimit, kun kyydissa olevan asiakas pytaa ajamaan ylinopeutta?",
   "options": [
     "a. Kerrot asiakkaalle ettet voi ajaa ylinopeutta, koska asetettua nopeausrajoitusta ei saa ylittaa.",
     "b. Kerrot asiakkaalle, että voit ajaa ylinopeutta, jos asiakaan kanssa on sovittu, ettă hän otta vastattavakseen kaikki mahdolliset oikeudelliset seuraamukset.",
@@ -444,7 +444,7 @@ q90: [
     correct: "b"
   },
 {
-  "question": "17. Voiko lasta kuljetta selka menosuuntaan asennetussa turvaistuimessa * 1 piste etuistuimella?",
+  "question": "17. Voiko lasta kuljetta selka menosuuntaan asennetussa turvaistuimessa etuistuimella?",
   "options": [
     "a. Ei koskaan.",
     "b. kylla, mutta vain ilman turvatynya.",
@@ -485,7 +485,7 @@ q90: [
   },
 
  {
-  "question": "22. Miten tulee toimia, kun otat kyytiin hyvin hitaasti liikkuva asiakkaan? *",
+  "question": "22. Miten tulee toimia, kun otat kyytiin hyvin hitaasti liikkuva asiakkaan?",
   "options": [
     "a. Avustan hanta ottamalla kasivarresta kiinni kysymätta asiakkaalta tarvitseeko hän apua.",
     "b. Nouset ajoneuvosta ja tiedustelet tarvitseeko han apua liikkumisessa ja autoon nousumisessa",
@@ -670,7 +670,7 @@ question: "24. Kenen vastuulla on hankkia koulu-ja päivähoitokuljetuksen kulje
 },
 
 {
-  "question": "41. Sinulle tulee näkövammista asiakas kyytiin miten hoidat tilanteen? *",
+  "question": "41. Sinulle tulee näkövammista asiakas kyytiin miten hoidat tilanteen?",
   "options": [
     "a. Vaadin, etta näkövammaisella on avustajan mukana",
     "b. En ota kyin kun en tieda miten nakovammaiseen suhtaudutaan",
@@ -791,7 +791,7 @@ question: "24. Kenen vastuulla on hankkia koulu-ja päivähoitokuljetuksen kulje
   "correct": "b"
 },
 {
-  "question": "53. Kenen vastuu, ettà taksissa on mukana likennelupa? *",
+  "question": "53. Kenen vastuu, ettà taksissa on mukana likennelupa?",
   "options": [
     "a. Taksinkuljettajan",
     "b. Lupa haltian",
@@ -840,7 +840,7 @@ question: "24. Kenen vastuulla on hankkia koulu-ja päivähoitokuljetuksen kulje
   "correct": "a"
 },
 {
-  "question": "58. Mitä seuraavista on oikein kun asiakas ei suostu käyttämään turvavyötä? *",
+  "question": "58. Mitä seuraavista on oikein kun asiakas ei suostu käyttämään turvavyötä?",
   "options": [
     "a. Sinun tulee pakotta asiakasta käyttämaän turvavyötä.",
     "b. Sinun tulee pyyta hänelta esittämaan laäkärin todistus",
@@ -908,7 +908,7 @@ question: "24. Kenen vastuulla on hankkia koulu-ja päivähoitokuljetuksen kulje
   "correct": "a"
 },
 {
-  "question": "65. Mistä tunnistat, että asiakkaan mukana oleva koira on työkoira? *",
+  "question": "65. Mistä tunnistat, että asiakkaan mukana oleva koira on työkoira?",
   "options": [
     "a. Koira on vapaa",
     "b. Koiralla on Heijastin",
@@ -1039,7 +1039,7 @@ question: "24. Kenen vastuulla on hankkia koulu-ja päivähoitokuljetuksen kulje
   "correct": "c"
 },
 {
-  "question": "79. Missä tilanteissa kuljettajan ei tarvitse käyttää turvavyötä? *",
+  "question": "79. Missä tilanteissa kuljettajan ei tarvitse käyttää turvavyötä?",
   "options": [
     "a. kuljettajan ei tarvitse käyttää turvavyötä yöaikaan ajaessa asiakkaan ollessa kyydissa.",
     "b. kuljettajan tarvitsee ajaessaan aina käyttäa turvavyötä.",
@@ -1118,7 +1118,7 @@ question: "24. Kenen vastuulla on hankkia koulu-ja päivähoitokuljetuksen kulje
   "correct": "a"
 },
 {
-  "question": "87. Mika suraavista on turvallisin kuljettaa lapsia taksilla? *",
+  "question": "87. Mika suraavista on turvallisin kuljettaa lapsia taksilla?",
   "options": [
     "a. Lapsen tulee istua etuistuimella turvaistuimessa",
     "b. Lapsen tulee istua takapenkillä turvaistuimessa",
@@ -1567,7 +1567,7 @@ let userAnswers = [];
 
 function loadSet(setName, btn){
   
-  quiz = questionSets[setName]; //[...questionSets[setName]].sort(() => Math.random() - 0.5);
+  quiz = [...questionSets[setName]].sort(() => Math.random() - 0.5); /questionSets[setName];
   current = 0;
   userAnswers = Array(quiz.length).fill(null);
   score = 0;
